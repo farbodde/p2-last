@@ -25,6 +25,7 @@ if (isMobile)
         <NuxtPage />
       </NuxtLayout>
       <ScrollToTop />
+      <AdminSnackbar />
     </VApp>
   </VLocaleProvider>
 </template>
