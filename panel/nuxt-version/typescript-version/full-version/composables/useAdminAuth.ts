@@ -43,19 +43,25 @@ export function useAdminAuth() {
   const userData = useCookie<StoredUser | null>('userData', cookieOpts)
   const userAbilityRules = useCookie<any[]>('userAbilityRules', cookieOpts)
 
+  // Capture the live ability instance now (during component setup) so we can
+  // update it after an `await` — inject() is unavailable once the async
+  // context is lost inside login()/logout().
+  const ability = (() => {
+    try {
+      return useAbility()
+    }
+    catch {
+      return null
+    }
+  })()
+
   const isLoggedIn = computed(() => Boolean(accessToken.value && userData.value))
   const isAdmin = computed(() => userData.value?.role === 'admin' || Boolean(userData.value?.is_staff))
 
   function applyAbility(role: UserRole | null) {
     const rules = abilityRulesForRole(role)
     userAbilityRules.value = rules
-    try {
-      useAbility().update(rules as any)
-    }
-    catch {
-      // Ability plugin not ready (SSR / early call) — cookie is enough; the
-      // casl plugin re-hydrates from the cookie on the next request.
-    }
+    ability?.update(rules as any)
   }
 
   async function login(email: string, password: string) {
@@ -115,10 +121,7 @@ export function useAdminAuth() {
     refreshToken.value = null
     userData.value = null
     userAbilityRules.value = []
-    try {
-      useAbility().update([])
-    }
-    catch { /* noop */ }
+    ability?.update([])
   }
 
   async function logout() {
