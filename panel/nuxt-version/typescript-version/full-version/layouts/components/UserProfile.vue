@@ -1,28 +1,13 @@
 <script setup lang="ts">
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 
-const ability = useAbility()
-
 // TODO: Get type from backend
 const userData = useCookie<any>('userData')
 
-const { signOut } = useAuth()
+const { logout: signOutAdmin } = useAdminAuth()
 
 async function logout() {
-  try {
-    await signOut({ redirect: false })
-
-    // Remove "userData" from cookie
-    userData.value = null
-
-    // Reset user abilities
-    ability.update([])
-
-    navigateTo({ name: 'login' })
-  }
-  catch (error) {
-    throw createError(error)
-  }
+  await signOutAdmin()
 }
 
 const userProfileList = [

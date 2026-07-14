@@ -1,9 +1,7 @@
-import appsAndPages from './apps-and-pages'
-import charts from './charts'
-import dashboard from './dashboard'
-import forms from './forms'
-import others from './others'
-import uiElements from './ui-elements'
+import admin from './admin'
 import type { VerticalNavItems } from '@layouts/types'
 
-export default [...dashboard, ...appsAndPages, ...uiElements, ...forms, ...charts, ...others] as VerticalNavItems
+// P2 Player admin panel navigation. The demo template sections
+// (apps-and-pages, ui-elements, forms, charts, others, dashboard) are retained
+// in the repo for reference but are intentionally not mounted in the sidebar.
+export default [...admin] as VerticalNavItems

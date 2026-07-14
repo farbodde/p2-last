@@ -1,10 +1,5 @@
-<!-- ❗Errors in the form are set on line 60 -->
 <script setup lang="ts">
-import type { NuxtError } from 'nuxt/app'
-import type { User } from 'next-auth'
-
 import { VForm } from 'vuetify/components/VForm'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import authV2LoginIllustrationBorderedDark from '@images/pages/auth-v2-login-illustration-bordered-dark.png'
 import authV2LoginIllustrationBorderedLight from '@images/pages/auth-v2-login-illustration-bordered-light.png'
@@ -14,8 +9,9 @@ import authV2MaskDark from '@images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@images/pages/misc-mask-light.png'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
+import { parseApiError } from '@/utils/adminApi'
 
-const { signIn, data: sessionData } = useAuth()
+const { login: adminLogin } = useAdminAuth()
 
 const authThemeImg = useGenerateImageVariant(authV2LoginIllustrationLight, authV2LoginIllustrationDark, authV2LoginIllustrationBorderedLight, authV2LoginIllustrationBorderedDark, true)
 
@@ -24,61 +20,52 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 definePageMeta({
   layout: 'blank',
   unauthenticatedOnly: true,
-
+  public: true,
 })
 
 const isPasswordVisible = ref(false)
 
 const route = useRoute()
 
-const ability = useAbility()
-
 const errors = ref<Record<string, string | undefined>>({
   email: undefined,
   password: undefined,
 })
 
+const loginError = ref<string | null>(null)
+const isLoading = ref(false)
+
 const refVForm = ref<VForm>()
 
 const credentials = ref({
-  email: 'admin@demo.com',
-  password: 'admin',
+  email: '',
+  password: '',
 })
 
 const rememberMe = ref(false)
 
 async function login() {
-  const response = await signIn('credentials', {
-    callbackUrl: '/',
-    redirect: false,
-    ...credentials.value,
-  })
-
-  // If error is not null => Error is occurred
-  if (response && response.error) {
-    const apiStringifiedError = response.error
-    const apiError: NuxtError = JSON.parse(apiStringifiedError)
-
-    errors.value = apiError.data as Record<string, string | undefined>
-
-    // If err => Don't execute further
-    return
-  }
-
-  // Reset error on successful login
+  isLoading.value = true
   errors.value = {}
+  loginError.value = null
 
-  // Update user abilities
-  const { user } = sessionData.value!
+  try {
+    await adminLogin(credentials.value.email, credentials.value.password)
+    await navigateTo(route.query.to ? String(route.query.to) : '/', { replace: true })
+  }
+  catch (err: any) {
+    const parsed = parseApiError(err)
 
-  useCookie<Partial<User>>('userData').value = user
-
-  // Save user abilities in cookie so we can retrieve it back on refresh
-  useCookie<User['abilityRules']>('userAbilityRules').value = user.abilityRules
-
-  ability.update(user.abilityRules ?? [])
-
-  navigateTo(route.query.to ? String(route.query.to) : '/', { replace: true })
+    // Map DRF field errors back onto the form where possible.
+    errors.value = {
+      email: parsed.fields.email?.[0],
+      password: parsed.fields.password?.[0],
+    }
+    loginError.value = parsed.message
+  }
+  finally {
+    isLoading.value = false
+  }
 }
 
 const onSubmit = () => {
@@ -142,23 +129,20 @@ const onSubmit = () => {
       >
         <VCardText>
           <h4 class="text-h4 mb-1">
-            Welcome to <span class="text-capitalize"> {{ themeConfig.app.title }} </span>! 👋🏻
+            P2 Player <span class="text-capitalize">Admin</span> 👋🏻
           </h4>
           <p class="mb-0">
-            Please sign-in to your account and start the adventure
+            Please sign in with your administrator account
           </p>
         </VCardText>
         <VCardText>
           <VAlert
-            color="primary"
+            v-if="loginError"
+            color="error"
             variant="tonal"
+            class="mb-4"
           >
-            <p class="text-sm mb-2">
-              Admin Email: <strong>admin@demo.com</strong> / Pass: <strong>admin</strong>
-            </p>
-            <p class="text-sm mb-0">
-              Client Email: <strong>client@demo.com</strong> / Pass: <strong>client</strong>
-            </p>
+            {{ loginError }}
           </VAlert>
         </VCardText>
         <VCardText>
@@ -211,39 +195,10 @@ const onSubmit = () => {
                 <VBtn
                   block
                   type="submit"
+                  :loading="isLoading"
                 >
                   Login
                 </VBtn>
-              </VCol>
-
-              <!-- create account -->
-              <VCol
-                cols="12"
-                class="text-center"
-              >
-                <span>New on our platform?</span>
-                <NuxtLink
-                  class="text-primary ms-1"
-                  :to="{ name: 'register' }"
-                >
-                  Create an account
-                </NuxtLink>
-              </VCol>
-              <VCol
-                cols="12"
-                class="d-flex align-center"
-              >
-                <VDivider />
-                <span class="mx-4">or</span>
-                <VDivider />
-              </VCol>
-
-              <!-- auth providers -->
-              <VCol
-                cols="12"
-                class="text-center"
-              >
-                <AuthProvider />
               </VCol>
             </VRow>
           </VForm>

@@ -12,14 +12,16 @@ const redirects: RouteRecordRaw[] = [
     name: 'index',
     meta: {
       middleware: to => {
-        const { data: sessionData } = useAuth()
+        const userData = useCookie<any>('userData')
+        const accessToken = useCookie('accessToken')
 
-        const userRole = sessionData.value?.user.role
+        const isAdmin = userData.value?.role === 'admin' || Boolean(userData.value?.is_staff)
 
-        if (userRole === 'admin')
-          return { name: 'dashboards-crm' }
-        if (userRole === 'client')
-          return { name: 'access-control' }
+        if (accessToken.value && userData.value && isAdmin)
+          return { name: 'admin-dashboard' }
+
+        if (accessToken.value && userData.value)
+          return { name: 'not-authorized' }
 
         return { name: 'login', query: to.query }
       },

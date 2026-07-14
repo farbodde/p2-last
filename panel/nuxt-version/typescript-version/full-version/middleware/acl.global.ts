@@ -1,5 +1,8 @@
 import { canNavigate } from '@layouts/plugins/casl'
 
+// Cookie-based JWT auth guard (replaces the template's nuxt-auth mock).
+// Login state is derived from the `accessToken` + `userData` cookies set by
+// useAdminAuth(); page access is gated by CASL abilities (userAbilityRules).
 export default defineNuxtRouteMiddleware(to => {
   /*
      * If it's a public route, continue navigation. This kind of pages are allowed to visited by login & non-login users. Basically, without any restrictions.
@@ -8,8 +11,9 @@ export default defineNuxtRouteMiddleware(to => {
   if (to.meta.public)
     return
 
-  const { status } = useAuth()
-  const isLoggedIn = status.value === 'authenticated'
+  const accessToken = useCookie('accessToken')
+  const userData = useCookie('userData')
+  const isLoggedIn = Boolean(accessToken.value && userData.value)
 
   /*
       If user is logged in and is trying to access login like page, redirect to home
