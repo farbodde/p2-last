@@ -117,8 +117,10 @@ export function hasFile(payload: Record<string, unknown>): boolean {
 }
 
 export interface ParsedApiError {
+
   /** A single human-readable message (best effort). */
   message: string
+
   /** field -> messages, for form binding. `non_field_errors`/`detail` under `_`. */
   fields: Record<string, string[]>
   status?: number
@@ -152,9 +154,8 @@ export function parseApiError(err: any): ParsedApiError {
       fields._ = toArray((data as any).error)
     }
     else {
-      for (const [key, value] of Object.entries(data)) {
+      for (const [key, value] of Object.entries(data))
         fields[key] = toArray(value)
-      }
 
       const first = Object.entries(fields)[0]
       if (first)

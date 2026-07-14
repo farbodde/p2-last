@@ -25,6 +25,7 @@ async function fetchItems() {
   isLoading.value = true
   try {
     const res = await platformsService.list({ page: page.value, page_size: itemsPerPage.value })
+
     items.value = res.results
     total.value = res.count
   }
@@ -80,6 +81,7 @@ async function save() {
   }
   catch (err) {
     const parsed = parseApiError(err)
+
     serverErrors.value = parsed.fields
     notifyError(parsed.message)
   }

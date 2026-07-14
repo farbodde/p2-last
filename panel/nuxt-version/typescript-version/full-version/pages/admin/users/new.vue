@@ -15,11 +15,13 @@ async function onSubmit(payload: Record<string, any>) {
   serverErrors.value = {}
   try {
     const user = await usersService.create(payload as UserCreatePayload)
+
     success('User created')
     await navigateTo(`/admin/users/${user.username ?? ''}`)
   }
   catch (err) {
     const parsed = parseApiError(err)
+
     serverErrors.value = parsed.fields
     notifyError(parsed.message)
   }

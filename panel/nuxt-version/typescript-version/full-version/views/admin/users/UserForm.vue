@@ -8,6 +8,7 @@ interface Props {
   mode: 'create' | 'edit'
   initial?: AdminUser | null
   submitting?: boolean
+
   /** field -> messages, from the backend (DRF) on validation failure. */
   serverErrors?: Record<string, string[]>
 }
@@ -48,6 +49,7 @@ const languageItems = ref<{ title: string; value: string }[]>([])
 onMounted(async () => {
   try {
     const langs = await metaService.languages()
+
     languageItems.value = langs.map(l => ({ title: l.name, value: l.code }))
   }
   catch {

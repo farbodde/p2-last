@@ -25,6 +25,7 @@ async function fetchItems() {
   isLoading.value = true
   try {
     const res = await categoriesService.list({ page: page.value, page_size: itemsPerPage.value })
+
     items.value = res.results
     total.value = res.count
   }
@@ -67,7 +68,9 @@ function openCreate() {
 function openEdit(c: Category) {
   editing.value = c
   title.value = c.title
+
   const isUnlimited = c.limit === null || c.limit === '' || c.limit === 'unlimited'
+
   unlimited.value = isUnlimited
   limit.value = isUnlimited ? null : Number(c.limit)
   serverErrors.value = {}
@@ -80,10 +83,12 @@ async function save() {
     return
   saving.value = true
   serverErrors.value = {}
+
   const payload = {
     title: title.value,
     limit: unlimited.value ? 'unlimited' : (limit.value ?? 'unlimited'),
   }
+
   try {
     if (editing.value)
       await categoriesService.update(editing.value.id, payload)
@@ -95,6 +100,7 @@ async function save() {
   }
   catch (err) {
     const parsed = parseApiError(err)
+
     serverErrors.value = parsed.fields
     notifyError(parsed.message)
   }

@@ -28,6 +28,7 @@ const headers = [
 async function loadCategories() {
   try {
     const res = await categoriesService.list({ page: 1, page_size: 100 })
+
     categories.value = res.results
   }
   catch { /* non-blocking */ }
@@ -37,6 +38,7 @@ async function fetchItems() {
   isLoading.value = true
   try {
     const res = await filterCategoriesService.list({ page: page.value, page_size: itemsPerPage.value })
+
     items.value = res.results
     total.value = res.count
   }
@@ -86,6 +88,7 @@ async function save() {
     return
   saving.value = true
   serverErrors.value = {}
+
   const payload = { category: category.value!, is_active: isActive.value, order: order.value }
   try {
     if (editing.value)
@@ -98,6 +101,7 @@ async function save() {
   }
   catch (err) {
     const parsed = parseApiError(err)
+
     serverErrors.value = parsed.fields
     notifyError(parsed.message)
   }

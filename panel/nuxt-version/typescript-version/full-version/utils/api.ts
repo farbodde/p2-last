@@ -25,6 +25,7 @@ async function tryRefresh(): Promise<boolean> {
         method: 'POST',
         body: { refresh: refreshToken.value },
       })
+
       accessToken.value = res.access
 
       return true
@@ -53,10 +54,13 @@ export const $api = $fetch.create({
 
     const accessToken = useCookie('accessToken').value
     if (accessToken) {
-      options.headers = {
-        ...options.headers,
-        Authorization: `Bearer ${accessToken}`,
-      }
+      // ofetch normalizes headers to a `Headers` instance before onRequest.
+      const headers = options.headers instanceof Headers
+        ? options.headers
+        : new Headers(options.headers as HeadersInit)
+
+      headers.set('Authorization', `Bearer ${accessToken}`)
+      options.headers = headers
     }
   },
 

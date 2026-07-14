@@ -29,6 +29,7 @@ const headers = [
 async function loadCategories() {
   try {
     const res = await categoriesService.list({ page: 1, page_size: 100 })
+
     categories.value = res.results
   }
   catch { /* non-blocking */ }
@@ -42,6 +43,7 @@ async function fetchItems() {
       page_size: itemsPerPage.value,
       category_id: categoryFilter.value ?? undefined,
     })
+
     items.value = res.results
     total.value = res.count
   }
@@ -80,6 +82,7 @@ function openEdit(it: Item) {
   editing.value = it
   title.value = it.title
   icon.value = null
+
   // `category` is a string label on read; match it back to an id when possible.
   categoryId.value = categories.value.find(c => c.title === it.category)?.id ?? null
   serverErrors.value = {}
@@ -113,6 +116,7 @@ async function save() {
   }
   catch (err) {
     const parsed = parseApiError(err)
+
     serverErrors.value = parsed.fields
     notifyError(parsed.message)
   }

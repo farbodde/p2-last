@@ -9,7 +9,7 @@ import type { Lfg } from '@/types/admin/misc'
 definePageMeta({ action: 'read', subject: 'AdminPanel' })
 
 const route = useRoute()
-const username = computed(() => String(route.params.username))
+const username = computed(() => String((route.params as { username: string }).username))
 const config = useRuntimeConfig()
 const { success, error: notifyError } = useSnackbar()
 
@@ -86,6 +86,7 @@ async function loadLfgs(id: number) {
   lfgError.value = null
   try {
     const res = await lfgService.byUser(id)
+
     lfgs.value = res.results
   }
   catch (err) {

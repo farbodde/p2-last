@@ -11,6 +11,7 @@ export interface Platform {
 export interface Category {
   id: number
   title: string
+
   /** number as string, or "unlimited"/null when no limit. */
   limit: string | number | null
   created_at: string
@@ -21,6 +22,7 @@ export interface Item {
   id: number
   title: string
   icon: string | null
+
   /** Read-only string representation of the category. */
   category: string
   created_at: string

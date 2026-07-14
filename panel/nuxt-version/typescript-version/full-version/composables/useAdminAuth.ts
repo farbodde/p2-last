@@ -60,6 +60,7 @@ export function useAdminAuth() {
 
   function applyAbility(role: UserRole | null) {
     const rules = abilityRulesForRole(role)
+
     userAbilityRules.value = rules
     ability?.update(rules as any)
   }
@@ -107,6 +108,7 @@ export function useAdminAuth() {
         method: 'POST',
         body: { refresh: refreshToken.value },
       })
+
       accessToken.value = res.access
 
       return true

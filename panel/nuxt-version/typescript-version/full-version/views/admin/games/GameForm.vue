@@ -48,6 +48,7 @@ async function ensureItems(categoryId: number) {
     return
   try {
     const res = await itemsService.list({ category_id: categoryId, page_size: 100 })
+
     itemsByCategory.value[categoryId] = res.results.map((i: Item) => ({ title: i.title, value: i.id }))
   }
   catch {
@@ -104,6 +105,7 @@ async function onSubmit() {
     platform_ids: platformIds.value,
     categories,
   }
+
   if (cover.value)
     payload.cover = cover.value
 

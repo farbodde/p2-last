@@ -33,6 +33,7 @@ async function fetchItems() {
   isLoading.value = true
   try {
     const res = await gamesService.list({ page: page.value, page_size: itemsPerPage.value })
+
     items.value = res.results
     total.value = res.count
   }
@@ -50,6 +51,7 @@ async function loadRefs() {
       platformsService.list({ page: 1, page_size: 100 }),
       categoriesService.list({ page: 1, page_size: 100 }),
     ])
+
     platforms.value = p.results
     categories.value = c.results
   }
@@ -77,6 +79,7 @@ function openCreate() {
 async function openEdit(g: Game) {
   mode.value = 'edit'
   serverErrors.value = {}
+
   // Fetch full detail (nested categories/items) before editing.
   try {
     editing.value = await gamesService.detail(g.id)
@@ -101,6 +104,7 @@ async function onSubmit(payload: GameWritePayload) {
   }
   catch (err) {
     const parsed = parseApiError(err)
+
     serverErrors.value = parsed.fields
     notifyError(parsed.message)
   }

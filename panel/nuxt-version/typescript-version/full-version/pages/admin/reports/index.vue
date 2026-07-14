@@ -26,6 +26,7 @@ async function fetchReports() {
   isLoading.value = true
   try {
     const res = await reportsService.list({ page: page.value, page_size: itemsPerPage.value })
+
     reports.value = res.results
     total.value = res.count
   }

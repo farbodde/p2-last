@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// Global snackbar host. Mounted once in App.vue.
 const { state } = useSnackbar()
 </script>
 

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// Lightweight confirmation dialog for destructive admin actions.
 interface Props {
   modelValue: boolean
   title?: string

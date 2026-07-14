@@ -41,10 +41,12 @@ async function sendPush() {
     if (dataJson.value.trim())
       payload.data = JSON.parse(dataJson.value)
     const res = await notificationsService.testPush(payload)
+
     success(res.detail || 'Push notification queued')
   }
   catch (err) {
     const parsed = parseApiError(err)
+
     pushErrors.value = parsed.fields
     notifyError(parsed.message)
   }
@@ -67,6 +69,7 @@ async function registerDevice() {
   registering.value = true
   try {
     const res = await notificationsService.registerDevice({ fcm_token: fcmToken.value, device_type: deviceType.value })
+
     success(res.detail || 'Device registered')
   }
   catch (err) {
@@ -86,6 +89,7 @@ async function unregisterDevice() {
   unregistering.value = true
   try {
     const res = await notificationsService.unregisterDevice(fcmToken.value)
+
     success(res.detail || 'Device removed')
   }
   catch (err) {
@@ -129,7 +133,7 @@ async function unregisterDevice() {
                 v-model="dataJson"
                 label="Data (optional JSON)"
                 rows="3"
-                placeholder='{ "key": "value" }'
+                placeholder="{ &quot;key&quot;: &quot;value&quot; }"
                 :rules="[validJson]"
               />
               <VBtn

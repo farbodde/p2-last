@@ -1,7 +1,7 @@
 // Users, roles and reports API service. Uses the template's $api (ofetch).
 
 import { ADMIN_ENDPOINTS as E } from '@/constants/adminEndpoints'
-import type { Paginated } from '@/types/admin/common'
+import type { CustomPage, DrfPage, Paginated } from '@/types/admin/common'
 import type {
   AdminUser,
   RoleUpdatePayload,
@@ -24,7 +24,7 @@ export interface UsersQuery {
  * - Image present → multipart; `languages` is encoded as a JSON string because
  *   DRF's JSONField does not reconstruct a list from repeated multipart keys.
  */
-function userBody(payload: Record<string, unknown>): FormData | Record<string, unknown> {
+function userBody(payload: Record<string, any>): FormData | Record<string, unknown> {
   if (!hasFile(payload))
     return cleanParams(payload)
 
@@ -39,7 +39,7 @@ export const usersService = {
   async list(query: UsersQuery = {}): Promise<Paginated<AdminUser>> {
     const page = query.page ?? 1
     const pageSize = query.page_size ?? 10
-    const raw = await $api(E.users.list, { query: cleanParams({ ...query, page, page_size: pageSize }) })
+    const raw = await $api<DrfPage<AdminUser> | CustomPage<AdminUser>>(E.users.list, { query: cleanParams({ ...query, page, page_size: pageSize }) })
 
     return normalizePaginated<AdminUser>(raw, page, pageSize)
   },
@@ -49,11 +49,11 @@ export const usersService = {
   },
 
   create(payload: UserCreatePayload): Promise<AdminUser> {
-    return $api(E.users.create, { method: 'POST', body: userBody(payload as Record<string, unknown>) })
+    return $api(E.users.create, { method: 'POST', body: userBody(payload) })
   },
 
   update(username: string, payload: UserUpdatePayload): Promise<AdminUser> {
-    return $api(E.users.update(username), { method: 'PUT', body: userBody(payload as Record<string, unknown>) })
+    return $api(E.users.update(username), { method: 'PUT', body: userBody(payload) })
   },
 
   remove(username: string): Promise<void> {
@@ -69,7 +69,7 @@ export const reportsService = {
   async list(query: { page?: number; page_size?: number } = {}): Promise<Paginated<UserReport>> {
     const page = query.page ?? 1
     const pageSize = query.page_size ?? 20
-    const raw = await $api(E.reports.list, { query: cleanParams({ page, page_size: pageSize }) })
+    const raw = await $api<DrfPage<UserReport> | CustomPage<UserReport>>(E.reports.list, { query: cleanParams({ page, page_size: pageSize }) })
 
     return normalizePaginated<UserReport>(raw, page, pageSize)
   },

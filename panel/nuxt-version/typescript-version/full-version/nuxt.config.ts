@@ -32,10 +32,6 @@ export default defineNuxtConfig({
     https://nuxt.com/docs/guide/going-further/runtime-config
   */
   runtimeConfig: {
-    // Private keys are only available on the server
-    AUTH_ORIGIN: process.env.AUTH_ORIGIN,
-    AUTH_SECRET: process.env.AUTH_SECRET,
-
     // Public keys that are exposed to the client.
     public: {
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || '/api',
@@ -56,15 +52,6 @@ export default defineNuxtConfig({
       path: '~/components',
       pathPrefix: false,
     }],
-  },
-
-  auth: {
-    baseURL: process.env.AUTH_ORIGIN,
-    globalAppMiddleware: false,
-
-    provider: {
-      type: 'authjs',
-    },
   },
 
   plugins: [
@@ -182,7 +169,6 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxtjs/i18n',
     '@nuxtjs/device',
-    '@sidebase/nuxt-auth',
     '@pinia/nuxt',
   ],
 })

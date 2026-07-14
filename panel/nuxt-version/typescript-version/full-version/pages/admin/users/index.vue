@@ -50,6 +50,7 @@ async function fetchUsers() {
       search: searchQuery.value || undefined,
       role: selectedRole.value || undefined,
     })
+
     users.value = res.results
     totalUsers.value = res.count
   }

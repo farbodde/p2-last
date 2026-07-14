@@ -6,8 +6,10 @@
 export interface Paginated<T> {
   count: number
   results: T[]
+
   /** 1-based current page (derived when the backend does not send it). */
   page: number
+
   /** Total pages (derived from count/pageSize when not provided). */
   numPages: number
   hasNext: boolean

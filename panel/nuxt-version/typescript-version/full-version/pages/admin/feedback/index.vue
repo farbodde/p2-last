@@ -42,6 +42,7 @@ async function fetchFeedback() {
       page_size: itemsPerPage.value,
       type: selectedType.value || undefined,
     })
+
     items.value = res.results
     total.value = res.count
   }
@@ -80,6 +81,7 @@ async function performDelete() {
   try {
     if (bulk.value) {
       const res = await feedbackService.bulkDelete(selectedRows.value)
+
       success(res.message || 'Feedback deleted')
       selectedRows.value = []
     }

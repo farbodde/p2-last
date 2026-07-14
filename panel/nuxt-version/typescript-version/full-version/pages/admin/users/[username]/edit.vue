@@ -7,7 +7,7 @@ import type { AdminUser, UserUpdatePayload } from '@/types/admin/user'
 definePageMeta({ action: 'read', subject: 'AdminPanel' })
 
 const route = useRoute()
-const username = computed(() => String(route.params.username))
+const username = computed(() => String((route.params as { username: string }).username))
 
 const { success, error: notifyError } = useSnackbar()
 const submitting = ref(false)
@@ -34,11 +34,13 @@ async function onSubmit(payload: Record<string, any>) {
   serverErrors.value = {}
   try {
     const updated = await usersService.update(username.value, payload as UserUpdatePayload)
+
     success('User updated')
     await navigateTo(`/admin/users/${updated.username ?? username.value}`)
   }
   catch (err) {
     const parsed = parseApiError(err)
+
     serverErrors.value = parsed.fields
     notifyError(parsed.message)
   }

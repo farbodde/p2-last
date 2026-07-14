@@ -1,7 +1,7 @@
 // Feedback, notifications, LFG inspection and meta reference data.
 
 import { ADMIN_ENDPOINTS as E } from '@/constants/adminEndpoints'
-import type { Paginated } from '@/types/admin/common'
+import type { CustomPage, DrfPage, Paginated } from '@/types/admin/common'
 import type {
   DevicePayload,
   Feedback,
@@ -15,7 +15,7 @@ export const feedbackService = {
   async list(query: { page?: number; page_size?: number; type?: FeedbackType | '' } = {}): Promise<Paginated<Feedback>> {
     const page = query.page ?? 1
     const pageSize = query.page_size ?? 10
-    const raw = await $api(E.feedback.list, { query: cleanParams({ ...query, page, page_size: pageSize }) })
+    const raw = await $api<DrfPage<Feedback> | CustomPage<Feedback>>(E.feedback.list, { query: cleanParams({ ...query, page, page_size: pageSize }) })
 
     return normalizePaginated<Feedback>(raw, page, pageSize)
   },
@@ -34,15 +34,15 @@ export const notificationsService = {
   registerDevice(payload: DevicePayload): Promise<{ detail: string }> {
     return $api(E.notifications.registerDevice, { method: 'POST', body: payload })
   },
-  unregisterDevice(fcm_token: string): Promise<{ detail: string }> {
-    return $api(E.notifications.unregisterDevice, { method: 'DELETE', body: { fcm_token } })
+  unregisterDevice(fcmToken: string): Promise<{ detail: string }> {
+    return $api(E.notifications.unregisterDevice, { method: 'DELETE', body: { fcm_token: fcmToken } })
   },
 }
 
 export const lfgService = {
   async byUser(userId: number, query: { page?: number } = {}): Promise<Paginated<Lfg>> {
     const page = query.page ?? 1
-    const raw = await $api(E.lfg.byUser(userId), { query: cleanParams({ page }) })
+    const raw = await $api<DrfPage<Lfg> | CustomPage<Lfg>>(E.lfg.byUser(userId), { query: cleanParams({ page }) })
 
     return normalizePaginated<Lfg>(raw, page)
   },
