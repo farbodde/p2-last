@@ -70,6 +70,42 @@ export const itemsService = {
   },
 }
 
+/**
+ * Encode a Game write payload as multipart/form-data using the nested HTML-form
+ * bracket convention that DRF's ListField (`html.parse_html_list`) understands:
+ *   title, cover (file),
+ *   platform_ids            (repeated keys),
+ *   categories[i][category]
+ *   categories[i][item_limit]
+ *   categories[i][items][j]
+ * A plain JSON-string body would NOT be parsed into dicts by the backend
+ * serializer (see GameCreateUpdateSerializer._resolve_categories).
+ */
+function buildGameFormData(payload: Partial<GameWritePayload>): FormData {
+  const fd = new FormData()
+
+  if (payload.title !== undefined)
+    fd.append('title', payload.title)
+
+  if (payload.cover instanceof File)
+    fd.append('cover', payload.cover)
+
+  if (payload.platform_ids)
+    payload.platform_ids.forEach(id => fd.append('platform_ids', String(id)))
+
+  if (payload.categories) {
+    payload.categories.forEach((cat, i) => {
+      fd.append(`categories[${i}][category]`, String(cat.category))
+      fd.append(`categories[${i}][item_limit]`, String(cat.item_limit))
+      cat.items.forEach((itemId, j) => {
+        fd.append(`categories[${i}][items][${j}]`, String(itemId))
+      })
+    })
+  }
+
+  return fd
+}
+
 export const gamesService = {
   async list(query: Record<string, unknown> = {}): Promise<Paginated<Game>> {
     const { page, pageSize, query: q } = pageArgs(query)
@@ -80,10 +116,12 @@ export const gamesService = {
     return $api(E.games.detail(id))
   },
   create(payload: GameWritePayload): Promise<Game> {
-    return $api(E.games.list, { method: 'POST', body: buildFormData(payload as unknown as Record<string, unknown>) })
+    return $api(E.games.list, { method: 'POST', body: buildGameFormData(payload) })
   },
   update(id: number, payload: Partial<GameWritePayload>): Promise<Game> {
-    return $api(E.games.detail(id), { method: 'PUT', body: buildFormData(payload as Record<string, unknown>) })
+    // PATCH (partial) so an unchanged cover need not be re-uploaded; the
+    // serializer's update() only replaces cover when a new file is provided.
+    return $api(E.games.detail(id), { method: 'PATCH', body: buildGameFormData(payload) })
   },
   remove(id: number): Promise<void> {
     return $api(E.games.detail(id), { method: 'DELETE' })

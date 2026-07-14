@@ -18,6 +18,23 @@ export interface UsersQuery {
   role?: UserRole | ''
 }
 
+/**
+ * Build the request body for user create/update.
+ * - No image → plain JSON (the `languages` JSONField accepts a real array).
+ * - Image present → multipart; `languages` is encoded as a JSON string because
+ *   DRF's JSONField does not reconstruct a list from repeated multipart keys.
+ */
+function userBody(payload: Record<string, unknown>): FormData | Record<string, unknown> {
+  if (!hasFile(payload))
+    return cleanParams(payload)
+
+  const clone: Record<string, unknown> = { ...payload }
+  if (Array.isArray(clone.languages))
+    clone.languages = JSON.stringify(clone.languages)
+
+  return buildFormData(clone)
+}
+
 export const usersService = {
   async list(query: UsersQuery = {}): Promise<Paginated<AdminUser>> {
     const page = query.page ?? 1
@@ -32,19 +49,11 @@ export const usersService = {
   },
 
   create(payload: UserCreatePayload): Promise<AdminUser> {
-    const body = hasFile(payload as Record<string, unknown>)
-      ? buildFormData(payload as Record<string, unknown>)
-      : cleanParams(payload as Record<string, unknown>)
-
-    return $api(E.users.create, { method: 'POST', body })
+    return $api(E.users.create, { method: 'POST', body: userBody(payload as Record<string, unknown>) })
   },
 
   update(username: string, payload: UserUpdatePayload): Promise<AdminUser> {
-    const body = hasFile(payload as Record<string, unknown>)
-      ? buildFormData(payload as Record<string, unknown>)
-      : cleanParams(payload as Record<string, unknown>)
-
-    return $api(E.users.update(username), { method: 'PUT', body })
+    return $api(E.users.update(username), { method: 'PUT', body: userBody(payload as Record<string, unknown>) })
   },
 
   remove(username: string): Promise<void> {
