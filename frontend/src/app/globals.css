@@ -1,0 +1,666 @@
+@import "tailwindcss";
+@plugin '../hero.ts';
+/* Note: You may need to change the path to fit your project structure */
+@source '../**/*.{js,ts,jsx,tsx,mdx}';
+@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+
+:root {
+  --background: #19181e;
+  --foreground: #fff;
+  --primary: oklab(64.875% -0.03695 -0.18499);
+  --success: #41d280;
+  --success-2: #22c55e;
+  --warning: #f2940a;
+  --danger: #f43f5e;
+}
+
+@theme inline {
+  --default-font-family: dana, "dana VF", tahoma, sans-serif;
+  --color-background: #191c25;
+  --color-foreground: var(--foreground);
+
+  --color-tab: #1e2129;
+
+  --color-primary: var(--primary);
+  --color-success: var(--success);
+  --color-success-2: var(--success-2);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  --breakpoint-screen: 36rem;
+
+  /* --color-gray-base: #6c737f;
+  --color-gray-25: #fcfcfd;
+  --color-gray-100: #f3f4f6; */
+}
+
+html {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: dana, "dana VF", tahoma, sans-serif;
+  background-image: url("/images/background.png");
+  background-position: center center;
+  background-size: 1024px;
+  background-repeat: repeat;
+}
+
+body {
+  font-family: dana, "dana VF", tahoma, sans-serif;
+}
+
+@utility width-screen {
+  @apply min-h-screen w-full max-w-xl;
+}
+
+@utility font-melting {
+  font-family: "Melting Point", sans-serif;
+}
+
+@supports (font-variation-settings: normal) {
+  body {
+    font-family: "dana VF", dana, tahoma, sans-serif;
+  }
+}
+
+@font-face {
+  font-family: "dana VF";
+  src:
+    url("/fonts/DanaVF.woff2") format("woff2-variations"),
+    url("/fonts/DanaVF.woff2") format("woff2"),
+    url("/fonts/DanaVF.woff") format("woff-variations"),
+    /* will be the standard and works in Safari now */ url("/fonts/DanaVF.woff")
+      format("woff");
+  /* for the other supporting browsers */
+  font-weight: 100 900;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: dana;
+  src: url("/fonts/DanaThin.ttf") format("truetype");
+  font-weight: 100;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: dana;
+  src: url("/fonts/DanaExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: dana;
+  src: url("/fonts/DanaLight.ttf") format("truetype");
+  font-weight: 300;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: dana;
+  src: url("/fonts/DanaRegular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: dana;
+  src: url("/fonts/DanaMedium.ttf") format("truetype");
+  font-weight: 500;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: dana;
+  src: url("/fonts/DanaDemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: dana;
+  src: url("/fonts/DanaBold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: dana;
+  src: url("/fonts/DanaExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: dana;
+  src: url("/fonts/DanaBlack.ttf") format("truetype");
+  font-weight: 900;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: "Melting Point";
+  src: url("/fonts/MeltingPointLight.ttf") format("truetype");
+  font-weight: 300;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: "Melting Point";
+  src: url("/fonts/MeltingPointLightItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: "Melting Point";
+  src: url("/fonts/MeltingPointRegular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: "Melting Point";
+  src: url("/fonts/MeltingPointItalic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: "Melting Point";
+  src: url("/fonts/MeltingPointBold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: "Melting Point";
+  src: url("/fonts/MeltingPointBoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: fallback;
+}
+
+.transparent {
+  background-color: transparent !important;
+}
+
+.checkbox-el {
+  &::after {
+    content: "";
+    background-color: oklch(50% 0.134 242.749);
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 4px;
+    opacity: 0;
+    transition-property:
+      color,
+      background-color,
+      border-color,
+      outline-color,
+      text-decoration-color,
+      fill,
+      stroke,
+      --tw-gradient-from,
+      --tw-gradient-via,
+      --tw-gradient-to,
+      opacity,
+      box-shadow,
+      transform,
+      translate,
+      scale,
+      rotate,
+      filter,
+      -webkit-backdrop-filter,
+      backdrop-filter,
+      display,
+      content-visibility,
+      overlay,
+      pointer-events;
+    transition-timing-function: var(
+      --tw-ease,
+      var(--default-transition-timing-function)
+        /* cubic-bezier(0.4, 0, 0.2, 1) */
+    );
+    transition-duration: var(
+      --tw-duration,
+      var(--default-transition-duration) /* 150ms */
+    );
+  }
+}
+
+input:checked ~ .checkbox-el {
+  border-color: var(--primary);
+  &::after {
+    background-color: var(--primary);
+    opacity: 1;
+  }
+}
+
+.border-dashed-long {
+  border-image: repeating-linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.1) 0,
+      rgba(255, 255, 255, 0.1) 8px,
+      transparent 8px,
+      transparent 16px
+    )
+    1;
+}
+
+.dir-detect {
+  direction: auto;
+  unicode-bidi: plaintext;
+  * {
+    direction: auto;
+    unicode-bidi: plaintext;
+  }
+}
+
+.layers {
+  position: relative;
+}
+
+.layers::before,
+.layers::after {
+  content: attr(data-text);
+  position: absolute;
+  width: 110%;
+  z-index: 0;
+}
+
+.glitch {
+  isolation: isolate;
+}
+
+.glitch span {
+  animation: glitch-paths 5s step-end infinite;
+  position: relative;
+  z-index: 1;
+}
+
+.layers::before {
+  top: 10px;
+  left: 15px;
+  color: #e0287d;
+}
+
+.layers::after {
+  top: 5px;
+  left: -10px;
+  color: #1bc7fb;
+}
+
+.glitch::before {
+  animation:
+    glitch-paths 5s step-end infinite,
+    glitch-opacity 5s step-end infinite,
+    glitch-font 8s step-end infinite,
+    glitch-movement 10s step-end infinite;
+}
+
+.glitch::after {
+  animation:
+    glitch-paths 5s step-end infinite,
+    glitch-opacity 5s step-end infinite,
+    glitch-font 7s step-end infinite,
+    glitch-movement 8s step-end infinite;
+}
+
+@keyframes glitch-paths {
+  0% {
+    clip-path: polygon(
+      0% 43%,
+      83% 43%,
+      83% 22%,
+      23% 22%,
+      23% 24%,
+      91% 24%,
+      91% 26%,
+      18% 26%,
+      18% 83%,
+      29% 83%,
+      29% 17%,
+      41% 17%,
+      41% 39%,
+      18% 39%,
+      18% 82%,
+      54% 82%,
+      54% 88%,
+      19% 88%,
+      19% 4%,
+      39% 4%,
+      39% 14%,
+      76% 14%,
+      76% 52%,
+      23% 52%,
+      23% 35%,
+      19% 35%,
+      19% 8%,
+      36% 8%,
+      36% 31%,
+      73% 31%,
+      73% 16%,
+      1% 16%,
+      1% 56%,
+      50% 56%,
+      50% 8%
+    );
+  }
+
+  5% {
+    clip-path: polygon(
+      0% 29%,
+      44% 29%,
+      44% 83%,
+      94% 83%,
+      94% 56%,
+      11% 56%,
+      11% 64%,
+      94% 64%,
+      94% 70%,
+      88% 70%,
+      88% 32%,
+      18% 32%,
+      18% 96%,
+      10% 96%,
+      10% 62%,
+      9% 62%,
+      9% 84%,
+      68% 84%,
+      68% 50%,
+      52% 50%,
+      52% 55%,
+      35% 55%,
+      35% 87%,
+      25% 87%,
+      25% 39%,
+      15% 39%,
+      15% 88%,
+      52% 88%
+    );
+  }
+
+  30% {
+    clip-path: polygon(
+      0% 53%,
+      93% 53%,
+      93% 62%,
+      68% 62%,
+      68% 37%,
+      97% 37%,
+      97% 89%,
+      13% 89%,
+      13% 45%,
+      51% 45%,
+      51% 88%,
+      17% 88%,
+      17% 54%,
+      81% 54%,
+      81% 75%,
+      79% 75%,
+      79% 76%,
+      38% 76%,
+      38% 28%,
+      61% 28%,
+      61% 12%,
+      55% 12%,
+      55% 62%,
+      68% 62%,
+      68% 51%,
+      0% 51%,
+      0% 92%,
+      63% 92%,
+      63% 4%,
+      65% 4%
+    );
+  }
+
+  45% {
+    clip-path: polygon(
+      0% 33%,
+      2% 33%,
+      2% 69%,
+      58% 69%,
+      58% 94%,
+      55% 94%,
+      55% 25%,
+      33% 25%,
+      33% 85%,
+      16% 85%,
+      16% 19%,
+      5% 19%,
+      5% 20%,
+      79% 20%,
+      79% 96%,
+      93% 96%,
+      93% 50%,
+      5% 50%,
+      5% 74%,
+      55% 74%,
+      55% 57%,
+      96% 57%,
+      96% 59%,
+      87% 59%,
+      87% 65%,
+      82% 65%,
+      82% 39%,
+      63% 39%,
+      63% 92%,
+      4% 92%,
+      4% 36%,
+      24% 36%,
+      24% 70%,
+      1% 70%,
+      1% 43%,
+      15% 43%,
+      15% 28%,
+      23% 28%,
+      23% 71%,
+      90% 71%,
+      90% 86%,
+      97% 86%,
+      97% 1%,
+      60% 1%,
+      60% 67%,
+      71% 67%,
+      71% 91%,
+      17% 91%,
+      17% 14%,
+      39% 14%,
+      39% 30%,
+      58% 30%,
+      58% 11%,
+      52% 11%,
+      52% 83%,
+      68% 83%
+    );
+  }
+
+  76% {
+    clip-path: polygon(
+      0% 26%,
+      15% 26%,
+      15% 73%,
+      72% 73%,
+      72% 70%,
+      77% 70%,
+      77% 75%,
+      8% 75%,
+      8% 42%,
+      4% 42%,
+      4% 61%,
+      17% 61%,
+      17% 12%,
+      26% 12%,
+      26% 63%,
+      73% 63%,
+      73% 43%,
+      90% 43%,
+      90% 67%,
+      50% 67%,
+      50% 41%,
+      42% 41%,
+      42% 46%,
+      50% 46%,
+      50% 84%,
+      96% 84%,
+      96% 78%,
+      49% 78%,
+      49% 25%,
+      63% 25%,
+      63% 14%
+    );
+  }
+
+  90% {
+    clip-path: polygon(
+      0% 41%,
+      13% 41%,
+      13% 6%,
+      87% 6%,
+      87% 93%,
+      10% 93%,
+      10% 13%,
+      89% 13%,
+      89% 6%,
+      3% 6%,
+      3% 8%,
+      16% 8%,
+      16% 79%,
+      0% 79%,
+      0% 99%,
+      92% 99%,
+      92% 90%,
+      5% 90%,
+      5% 60%,
+      0% 60%,
+      0% 48%,
+      89% 48%,
+      89% 13%,
+      80% 13%,
+      80% 43%,
+      95% 43%,
+      95% 19%,
+      80% 19%,
+      80% 85%,
+      38% 85%,
+      38% 62%
+    );
+  }
+
+  1%,
+  7%,
+  33%,
+  47%,
+  78%,
+  93% {
+    clip-path: none;
+  }
+}
+
+@keyframes glitch-movement {
+  0% {
+    top: 0;
+    left: -20px;
+  }
+
+  15% {
+    top: 10px;
+    left: 10px;
+  }
+
+  60% {
+    top: 5px;
+    left: -10px;
+  }
+
+  75% {
+    top: -5px;
+    left: 20px;
+  }
+
+  100% {
+    top: 10px;
+    left: 5px;
+  }
+}
+
+@keyframes glitch-opacity {
+  0% {
+    opacity: 0.1;
+  }
+
+  5% {
+    opacity: 0.7;
+  }
+
+  30% {
+    opacity: 0.4;
+  }
+
+  45% {
+    opacity: 0.6;
+  }
+
+  76% {
+    opacity: 0.4;
+  }
+
+  90% {
+    opacity: 0.8;
+  }
+
+  1%,
+  7%,
+  33%,
+  47%,
+  78%,
+  93% {
+    opacity: 0;
+  }
+}
+
+@keyframes glitch-font {
+  0% {
+    color: #e0287d;
+    filter: blur(3px);
+    font-weight: 100;
+  }
+
+  20% {
+    color: #fff;
+    filter: blur(0);
+    font-weight: 500;
+  }
+
+  50% {
+    color: #1bc7fb;
+    filter: blur(2px);
+    font-weight: 300;
+  }
+
+  60% {
+    color: #fff;
+    filter: blur(0);
+    font-weight: 700;
+  }
+
+  90% {
+    color: #e0287d;
+    filter: blur(6px);
+    font-weight: 500;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch span,
+  .glitch::before,
+  .glitch::after {
+    animation: none;
+    clip-path: none;
+  }
+}

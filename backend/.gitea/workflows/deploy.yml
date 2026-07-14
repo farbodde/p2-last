@@ -1,0 +1,17 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy
+        run: |
+          cd /root/project/Backend
+          git pull origin dev
+          docker compose up -d --build --force-recreate
