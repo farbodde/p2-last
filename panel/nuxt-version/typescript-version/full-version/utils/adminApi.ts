@@ -39,6 +39,21 @@ export function normalizePaginated<T>(
   }
 }
 
+/**
+ * Resolve a (possibly relative) media path returned by the backend to an
+ * absolute URL by stripping the trailing `/api/v1` from the configured API base.
+ */
+export function mediaUrl(path?: string | null): string | undefined {
+  if (!path)
+    return undefined
+  if (path.startsWith('http'))
+    return path
+
+  const base = String(useRuntimeConfig().public.apiBaseUrl || '').replace(/\/api\/v1\/?$/, '')
+
+  return `${base}${path}`
+}
+
 /** Strip null/undefined/'' entries so we don't send empty query params. */
 export function cleanParams(params: Record<string, unknown>): Record<string, unknown> {
   return Object.fromEntries(
