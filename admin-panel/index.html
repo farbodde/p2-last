@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Player2 Admin</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>" />
+  <!-- Runtime env (overridable by Docker/nginx at deploy time). Must load before the app. -->
+  <script src="./env.js"></script>
+  <link rel="stylesheet" href="./src/styles/theme.css" />
+  <link rel="stylesheet" href="./src/styles/app.css" />
+  <!-- Set theme ASAP to avoid flash of wrong theme -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('p2admin.theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <div id="app" aria-busy="true">
+    <div class="boot-splash">
+      <div class="spinner" role="status" aria-label="Loading"></div>
+    </div>
+  </div>
+  <div id="toast-root" class="toast-root" aria-live="polite" aria-atomic="true"></div>
+  <div id="dialog-root"></div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

@@ -18,14 +18,18 @@ _Updated every phase. `[x]` done · `[~]` in progress · `[ ]` todo · `[!]` blo
 - [!] **AWAITING USER**: confirm test admin account is is_staff **and** Group "admin"
 - [ ] (optional) run §6 manual curl checks against a live instance
 
-## Phase 1 — Core framework  _(not started — gated on Phase 0 sign-off)_
-- [ ] Project skeleton (index.html, ESM entry, dev server on 3005)
-- [ ] API client (verbs, upload/download, query builder, retry/timeout, auth inject, refresh-on-401, envelope normaliser)
-- [ ] Auth flow (login/logout, token storage, protected routes, 401/403)
-- [ ] App shell (layout, registry-driven grouped sidebar, dark/light, router, breadcrumbs)
-- [ ] Base UI kit (button/input/select/table/dialog/toast/skeleton/pagination/badge/breadcrumb/empty)
-- [ ] Resource registry manifest
-- [ ] STOP — demo shell + auth
+## Phase 1 — Core framework  ✅ (decisions taken as recommended defaults; STOP for review)
+- [x] Project skeleton (index.html, env.js, ESM entry, zero-dep dev server on 3005)
+- [x] API client (verbs, multipart upload, blob download, query builder, retry/timeout, Bearer inject, single-flight refresh-on-401, envelope normaliser A/B/C/D)
+- [x] Auth flow (login/logout, memory access + localStorage refresh, bootstrap, protected routes, 401 refresh, 403 view, admin-only login gate)
+- [x] App shell (responsive layout, registry-driven sidebar grouped by Django app, dark/light + system, History-API router, breadcrumbs, user menu)
+- [x] Base UI kit (button/input/select/textarea/checkbox/table[sort+select]/dialog[focus-trap]/toast/skeleton/spinner/pagination/badge/breadcrumb/empty)
+- [x] Resource registry manifest (all resources, gates, envelopes, actions, field fallbacks)
+- [x] Verified: node syntax check (21 modules), pure-module smoke test, dev server (MIME + SPA fallback), headless render — zero console/page errors, both themes
+- [x] RUNNING.md + ARCHITECTURE.md
+- [!] **STOP — awaiting review of running shell + auth flow before Phase 2**
+
+Decisions applied (changeable): schema=Hybrid (no backend change) · scope=existing endpoints · lang=LTR-English (RTL-ready via logical CSS) · panel handles is_staff 403 gracefully.
 
 ## Phase 2 — Pilot resources  _(not started)_
 - [ ] Platforms (simple, image, style-G)

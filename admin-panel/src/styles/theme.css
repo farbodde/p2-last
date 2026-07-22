@@ -1,0 +1,212 @@
+/* Design tokens + reset. Light is the base; dark overrides via
+   [data-theme="dark"] and @media(prefers-color-scheme) when no explicit choice. */
+
+:root {
+  /* Spacing scale */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-full: 999px;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, 'Inter', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 20px;
+  --fs-2xl: 26px;
+
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.08);
+  --shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08), 0 2px 4px rgba(16, 24, 40, 0.06);
+  --shadow-lg: 0 12px 32px rgba(16, 24, 40, 0.14);
+
+  --sidebar-w: 250px;
+  --topbar-h: 58px;
+
+  --transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Light palette */
+  --bg: #f6f7f9;
+  --bg-elev: #ffffff;
+  --bg-subtle: #f0f1f4;
+  --bg-hover: #f2f4f7;
+  --surface: #ffffff;
+  --border: #e4e7ec;
+  --border-strong: #d0d5dd;
+
+  --text: #101828;
+  --text-secondary: #475467;
+  --text-muted: #98a2b3;
+
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-fg: #ffffff;
+  --primary-soft: #eef2ff;
+
+  --danger: #d92d20;
+  --danger-hover: #b42318;
+  --danger-soft: #fef3f2;
+
+  --success: #067647;
+  --success-soft: #ecfdf3;
+  --warning: #b54708;
+  --warning-soft: #fffaeb;
+  --info: #175cd3;
+  --info-soft: #eff8ff;
+
+  --focus-ring: 0 0 0 3px rgba(79, 70, 229, 0.35);
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #0b0e14;
+  --bg-elev: #12161f;
+  --bg-subtle: #171c26;
+  --bg-hover: #1b2130;
+  --surface: #12161f;
+  --border: #232a37;
+  --border-strong: #2f3846;
+
+  --text: #e6e9ef;
+  --text-secondary: #a3acbd;
+  --text-muted: #6b7688;
+
+  --primary: #6366f1;
+  --primary-hover: #818cf8;
+  --primary-fg: #ffffff;
+  --primary-soft: #1e1b3a;
+
+  --danger: #f97066;
+  --danger-hover: #fda29b;
+  --danger-soft: #2b1513;
+
+  --success: #47cd89;
+  --success-soft: #10231a;
+  --warning: #f7b27a;
+  --warning-soft: #241a10;
+  --info: #53b1fd;
+  --info-soft: #0f1d2e;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
+  --focus-ring: 0 0 0 3px rgba(99, 102, 241, 0.45);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']):not([data-theme='dark']) {
+    --bg: #0b0e14;
+    --bg-elev: #12161f;
+    --bg-subtle: #171c26;
+    --bg-hover: #1b2130;
+    --surface: #12161f;
+    --border: #232a37;
+    --border-strong: #2f3846;
+    --text: #e6e9ef;
+    --text-secondary: #a3acbd;
+    --text-muted: #6b7688;
+    --primary: #6366f1;
+    --primary-hover: #818cf8;
+    --primary-soft: #1e1b3a;
+    --danger: #f97066;
+    --danger-hover: #fda29b;
+    --danger-soft: #2b1513;
+    --success: #47cd89;
+    --success-soft: #10231a;
+    --warning: #f7b27a;
+    --warning-soft: #241a10;
+    --info: #53b1fd;
+    --info-soft: #0f1d2e;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
+    --focus-ring: 0 0 0 3px rgba(99, 102, 241, 0.45);
+    color-scheme: dark;
+  }
+}
+
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  font-family: inherit;
+}
+img {
+  max-width: 100%;
+}
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+/* Boot splash + spinner */
+.boot-splash {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+}
+.spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2.5px solid var(--border-strong);
+  border-top-color: var(--primary);
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
