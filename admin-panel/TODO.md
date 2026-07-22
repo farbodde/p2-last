@@ -49,12 +49,14 @@ sends JSON when no new cover is chosen, and DRF bracket-notation multipart when 
 cover file is attached. The multipart+nested path is UNVERIFIED against a live
 backend (documented in views/game-form.js) — confirm during Phase 6.
 
-## Phase 3 — Generalise  _(not started)_
-- [ ] Categories, Items
-- [ ] Filter Categories
-- [ ] Feedback (list/delete/bulk-delete) + User Reports (list/delete)
-- [ ] Notifications action panel
-- [ ] Per-user LFG viewer (graceful 500 handling)
+## Phase 3 — Generalise  ✅ (all batches; verified headless, zero console/page errors)
+- [x] Batch 3a — Categories, Items (generic engine; Items edit resolves category select from the read label via prefillLabelFrom)
+- [x] Batch 3b — Filter Categories (ModelViewSet, envelope NONE / plain array)
+- [x] Batch 3c — Feedback (list + delete + bulk-delete) & User Reports (list + delete, is_staff gate) + read-only record inspector dialog (screenshots / image_urls)
+- [x] Batch 3d — Notifications action panel (test push, register/unregister device) as dedicated action UI, with honest note that push delivery is stubbed in the backend
+- [x] Batch 3e — Per-user LFG lookup view (read-only; graceful handling of the known backend 500)
+- [x] New view types: actions.js, lookup.js; detail-dialog.js; wired into router
+- [x] Every registry resource now reachable and functional from the sidebar
 
 ## Phase 4 — Dashboard  _(not started)_
 ## Phase 5 — Docker (port 3005, extends compose)  _(not started)_

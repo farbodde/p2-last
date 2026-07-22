@@ -53,7 +53,14 @@ export async function renderForm(outletEl, resource, { router, id }) {
   const formEl = h('form.rform', { novalidate: true });
 
   visible.forEach((f) => {
-    const ctrl = buildControl(f, initial[f.name], relations);
+    let val = initial[f.name];
+    // Some read serializers expose a relation as a label string (no id). If so,
+    // resolve the FK select's initial value by matching that label.
+    if (f.type === 'pk' && (val === undefined || val === null) && f.prefillLabelFrom && initial[f.prefillLabelFrom]) {
+      const opt = (relations[f.relation] || []).find((o) => String(o.label) === String(initial[f.prefillLabelFrom]));
+      if (opt) val = opt.value;
+    }
+    const ctrl = buildControl(f, val, relations);
     controls.set(f.name, ctrl);
     formEl.appendChild(ctrl.wrap);
   });

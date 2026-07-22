@@ -1053,6 +1053,83 @@
   color: var(--danger);
 }
 
+/* ===== Action panel ===== */
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--sp-4);
+}
+.action-card__title {
+  font-size: var(--fs-lg);
+  font-weight: 620;
+  margin-bottom: var(--sp-1);
+}
+.action-card__desc {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-4);
+}
+.action-card .rform__actions {
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+}
+
+/* ===== Record inspector (dialog) ===== */
+.rec {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.rec__row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--border);
+}
+.rec__row:last-child {
+  border-bottom: 0;
+}
+.rec__k {
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  font-weight: 550;
+}
+.rec__v {
+  min-width: 0;
+  word-break: break-word;
+}
+.rec__text {
+  white-space: pre-wrap;
+}
+.rec__imgs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+.rec__img img {
+  height: 72px;
+  width: 72px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+/* ===== Lookup ===== */
+.lookup__form {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-3);
+}
+.lookup__form .field {
+  margin-bottom: 0;
+  flex: 1;
+  max-width: 260px;
+}
+.lookup__results {
+  margin-top: var(--sp-5);
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
   .shell {

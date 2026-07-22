@@ -8,6 +8,7 @@ import { toast } from '../ui/toast.js';
 import { confirmDialog } from '../ui/dialog.js';
 import { listResource, bulkDeleteResource, deleteResource } from '../data/api.js';
 import { prettyLabel, rowId } from './shared.js';
+import { openRecordDialog } from './detail-dialog.js';
 
 export function renderList(outletEl, resource, { router }) {
   const state = {
@@ -148,6 +149,7 @@ export function renderList(outletEl, resource, { router }) {
       sortable: false,
       render: (row) =>
         h('div.rowactions', [
+          resource.rowDetail ? button('View', { kind: 'ghost', size: 'sm', onClick: (e) => { e.stopPropagation(); openRecordDialog(resource, row); } }) : null,
           canEdit ? button('Edit', { kind: 'ghost', size: 'sm', onClick: (e) => { e.stopPropagation(); router.navigate(`/r/${resource.key}/${encodeURIComponent(rowId(resource, row))}`); } }) : null,
           canDelete ? button('', { kind: 'ghost', size: 'sm', iconName: 'x', ariaLabel: 'Delete', onClick: (e) => { e.stopPropagation(); onRowDelete(row); } }) : null,
         ]),
@@ -201,7 +203,11 @@ export function renderList(outletEl, resource, { router }) {
         selected: state.selected,
         onToggle: (key, on) => { on ? state.selected.add(key) : state.selected.delete(key); render(); },
         onToggleAll: (on) => { state.selected = on ? new Set(state.data.items.map((r) => rowId(resource, r))) : new Set(); render(); },
-        onRowClick: canEdit ? (row) => router.navigate(`/r/${resource.key}/${encodeURIComponent(rowId(resource, row))}`) : null,
+        onRowClick: canEdit
+          ? (row) => router.navigate(`/r/${resource.key}/${encodeURIComponent(rowId(resource, row))}`)
+          : resource.rowDetail
+          ? (row) => openRecordDialog(resource, row)
+          : null,
       })
     );
 

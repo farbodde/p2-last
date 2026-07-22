@@ -83,6 +83,8 @@ export const RESOURCES = [
     idField: 'id',
     envelope: ENVELOPE.DRF,
     capabilities: { list: true, create: false, retrieve: false, update: false, delete: true },
+    rowDetail: true, // read-only inspector built from the list row
+    detailImages: 'image_urls',
     endpoints: {
       list: '/api/v1/auth/admin/users/reports/',
       delete: (id) => `/api/v1/auth/admin/users/reports/${id}/delete/`,
@@ -168,7 +170,9 @@ export const RESOURCES = [
     fields: [
       { name: 'title', type: 'string', required: true },
       { name: 'icon', type: 'image' },
-      { name: 'category_id', type: 'pk', relation: 'categories', required: true, writeOnly: true },
+      // read serializer returns `category` as a title string (no id), so on edit
+      // we resolve the select from that label.
+      { name: 'category_id', type: 'pk', relation: 'categories', required: true, writeOnly: true, prefillLabelFrom: 'category' },
     ],
   },
   {
@@ -236,6 +240,8 @@ export const RESOURCES = [
     idField: 'id',
     envelope: ENVELOPE.DRF,
     capabilities: { list: true, create: false, retrieve: false, update: false, delete: true, bulkDelete: true },
+    rowDetail: true, // read-only inspector built from the list row
+    detailImages: 'screenshots', // [{id, image}]
     endpoints: {
       list: '/api/v1/feedback/list/',
       delete: (id) => `/api/v1/feedback/delete/${id}/`,
@@ -262,9 +268,37 @@ export const RESOURCES = [
     gate: GATE.ADMIN_GROUP,
     capabilities: { list: false },
     actions: [
-      { key: 'register-device', label: 'Register device', method: 'POST', path: '/api/v1/notify/devices/', body: ['fcm_token', 'device_type'] },
-      { key: 'unregister-device', label: 'Unregister device', method: 'DELETE', path: '/api/v1/notify/devices/remove/', body: ['fcm_token'] },
-      { key: 'test-push', label: 'Send test push', method: 'POST', path: '/api/v1/notify/test/', body: ['title', 'body', 'data'] },
+      {
+        key: 'test-push',
+        label: 'Send test push',
+        description: 'Queue a test push notification. Note: the backend currently stubs delivery (the Celery dispatch is commented out), so this returns success without actually sending.',
+        method: 'POST',
+        path: '/api/v1/notify/test/',
+        inputs: [
+          { name: 'title', type: 'string', required: true },
+          { name: 'body', type: 'text', required: true },
+          { name: 'data', type: 'json', hint: 'Optional JSON object.' },
+        ],
+      },
+      {
+        key: 'register-device',
+        label: 'Register device',
+        description: 'Associate an FCM token with your admin account.',
+        method: 'POST',
+        path: '/api/v1/notify/devices/',
+        inputs: [
+          { name: 'fcm_token', type: 'string', required: true },
+          { name: 'device_type', type: 'choice', required: true, choices: ['android', 'ios', 'web'] },
+        ],
+      },
+      {
+        key: 'unregister-device',
+        label: 'Unregister device',
+        description: 'Remove an FCM token from your admin account.',
+        method: 'DELETE',
+        path: '/api/v1/notify/devices/remove/',
+        inputs: [{ name: 'fcm_token', type: 'string', required: true }],
+      },
     ],
   },
 

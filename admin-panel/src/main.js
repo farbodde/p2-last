@@ -7,6 +7,8 @@ import { renderDashboard } from './views/dashboard.js';
 import { renderResource } from './views/resource.js';
 import { renderList } from './views/list.js';
 import { renderForm } from './views/form.js';
+import { renderActions } from './views/actions.js';
+import { renderLookup } from './views/lookup.js';
 import { renderForbidden, renderNotFound } from './views/errors.js';
 import { getResource } from './resources/registry.js';
 
@@ -53,8 +55,9 @@ router
     const out = ensureShell(appEl, router);
     setActiveNav('/r/' + ctx.params.resource);
     const res = getResource(ctx.params.resource);
-    const listable = res && res.capabilities?.list !== false && res.viewStyle !== 'actions' && res.viewStyle !== 'lookup';
-    if (listable) renderList(out, res, { router });
+    if (res && res.viewStyle === 'actions') renderActions(out, res, { router });
+    else if (res && res.viewStyle === 'lookup') renderLookup(out, res, { router });
+    else if (res && res.capabilities?.list !== false) renderList(out, res, { router });
     else renderResource(out, ctx.params.resource, { router });
   })
   .add('/forbidden', () => {
