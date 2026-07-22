@@ -4,6 +4,9 @@ node_modules/
 # Local preview artifacts (screenshots generated during verification)
 design-preview-*.png
 
+# Generated docs output (source of truth is the .md files)
+*.pdf
+
 # Env overrides / local
 .env
 *.local
