@@ -74,8 +74,18 @@ backend (documented in views/game-form.js) — confirm during Phase 6.
 - [x] Client fix: empty API_BASE resolves to same-origin (config.js + buildUrl)
 - [x] Validated without a Docker daemon: env.js writer output, nginx template substitution ($host/$uri preserved), compose YAML, same-origin vs default API_BASE
 - [!] NOTE: a real `docker build`/`up` could not run in this sandbox (no Docker daemon) — build/boot is a manual verification step (commands in RUNNING.md)
-## Phase 6 — Verification + VERIFICATION_REPORT.md  _(not started)_
+## Phase 6 — Verification + VERIFICATION_REPORT.md  ✅
+- [x] Automated headless verification suite (Playwright, real app vs mocked API): **24/24 checks pass**
+- [x] Covered: auth (login, admin-gate, token storage, protected routes, 401→refresh→retry, logout), CRUD (POST/PUT/DELETE method+path+body), bulk delete (sequential + bulk endpoint), form validation (backend + client), pagination/filter/search/sort params, responsive sidebar, a11y (dialog focus-trap/aria-modal, Escape, aria-live, keyboard sort), performance/footprint
+- [x] VERIFICATION_REPORT.md (results, limitations, manual steps, technical notes)
 
 ## Docs to also produce (per brief)
-- [ ] RUNNING.md
-- [ ] ARCHITECTURE.md (schema-discovery + token-storage rationale)
+- [x] RUNNING.md
+- [x] ARCHITECTURE.md (schema-discovery + token-storage rationale)
+
+---
+
+## ✅ All phases complete (0–6). Backend untouched; awaiting your review / any tweaks.
+Outstanding decisions still open if you want changes: schema strategy (hybrid vs
+additive endpoint), parity scope, RTL/Persian. Live end-to-end pass + Docker
+build are the only steps that need a real backend/daemon (see VERIFICATION_REPORT.md).
