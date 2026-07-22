@@ -58,7 +58,13 @@ backend (documented in views/game-form.js) — confirm during Phase 6.
 - [x] New view types: actions.js, lookup.js; detail-dialog.js; wired into router
 - [x] Every registry resource now reachable and functional from the sidebar
 
-## Phase 4 — Dashboard  _(not started)_
+## Phase 4 — Dashboard  ✅ (verified headless, both themes, zero errors)
+- [x] Stat cards for every countable resource — counts derived from real list `count`s (no fabricated data); 403/errors shown honestly, not as 0
+- [x] "Needs attention" banner (open feedback + reports) with quick links
+- [x] Lightweight theme-aware SVG bar chart of records-by-resource (real counts only)
+- [x] System status card (connectivity, API base, signed-in identity/role)
+- [x] Recent activity: recent users / feedback / reports (newest-first from the backend)
+
 ## Phase 5 — Docker (port 3005, extends compose)  _(not started)_
 ## Phase 6 — Verification + VERIFICATION_REPORT.md  _(not started)_
 
