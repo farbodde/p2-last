@@ -27,7 +27,10 @@ function refreshOnce() {
 }
 
 function buildUrl(path, query) {
-  const url = new URL(path.startsWith('http') ? path : API_BASE + path);
+  // Resolve against the current origin so an empty API_BASE means "same-origin"
+  // (the Docker/nginx setup proxies /api, /media, /static to the backend).
+  const base = typeof window !== 'undefined' && window.location ? window.location.origin : 'http://localhost';
+  const url = new URL(path.startsWith('http') ? path : API_BASE + path, base);
   if (query && typeof query === 'object') {
     for (const [k, v] of Object.entries(query)) {
       if (v === undefined || v === null || v === '') continue;

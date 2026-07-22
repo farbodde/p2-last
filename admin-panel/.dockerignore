@@ -1,0 +1,8 @@
+node_modules
+design-preview-*.png
+*.md
+serve.mjs
+package.json
+.gitignore
+.git
+.DS_Store

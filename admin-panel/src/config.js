@@ -1,7 +1,9 @@
 // Centralised, typed access to runtime config + app-wide constants.
 const ENV = (typeof window !== 'undefined' && window.__ENV__) || {};
 
-export const API_BASE = String(ENV.API_BASE || 'http://localhost:8001').replace(/\/+$/, '');
+// An explicitly empty API_BASE means "same-origin" (Docker/nginx proxies the
+// API); only fall back to the dev default when the key is truly absent.
+export const API_BASE = (ENV.API_BASE !== undefined && ENV.API_BASE !== null ? String(ENV.API_BASE) : 'http://localhost:8001').replace(/\/+$/, '');
 export const APP_NAME = ENV.APP_NAME || 'Player2 Admin';
 
 // API path prefixes (from Phase 0 discovery).

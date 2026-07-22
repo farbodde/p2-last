@@ -1,0 +1,36 @@
+# Admin-panel compose that EXTENDS the existing backend stack without modifying
+# it. `include` pulls in backend/docker-compose.yml unchanged, so the panel joins
+# the same project + network and can reach the backend by its Docker service
+# name ("web"). nginx proxies /api,/media,/static to web:8000 → no CORS needed.
+#
+# Requires Docker Compose v2.20+ (for `include`).
+#
+# Usage (from this directory):
+#   docker compose up -d --build
+#   → panel:   http://localhost:3005
+#   → backend: http://localhost:8001  (unchanged, from the included file)
+#
+# If your Compose is older than 2.20 and lacks `include`, see RUNNING.md for the
+# alternative (attach to the backend's external network).
+
+include:
+  - ../backend/docker-compose.yml
+
+services:
+  admin-panel:
+    build:
+      context: .
+    image: player2-admin-panel
+    container_name: player2-admin-panel
+    ports:
+      - "3005:3005"
+    environment:
+      # Empty API_BASE → browser calls same-origin; nginx proxies to the backend.
+      - API_BASE=
+      - APP_NAME=Player2 Admin
+      # Backend Docker service name/port (from the included backend compose).
+      - BACKEND_HOST=web
+      - BACKEND_PORT=8000
+    depends_on:
+      - web
+    restart: unless-stopped

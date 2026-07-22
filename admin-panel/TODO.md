@@ -65,7 +65,15 @@ backend (documented in views/game-form.js) — confirm during Phase 6.
 - [x] System status card (connectivity, API base, signed-in identity/role)
 - [x] Recent activity: recent users / feedback / reports (newest-first from the backend)
 
-## Phase 5 — Docker (port 3005, extends compose)  _(not started)_
+## Phase 5 — Docker (port 3005, extends compose)  ✅
+- [x] Dockerfile (nginx:alpine serving the static app on 3005)
+- [x] nginx template: SPA fallback + reverse-proxy /api,/media,/static to the backend by Docker service name (no CORS in compose)
+- [x] Runtime env.js writer (docker/40-write-env.sh) — API_BASE from env; empty = same-origin
+- [x] .dockerignore
+- [x] docker-compose.yml `include:`s the backend compose unmodified (extends, doesn't break); panel reaches backend at web:8000; depends_on web
+- [x] Client fix: empty API_BASE resolves to same-origin (config.js + buildUrl)
+- [x] Validated without a Docker daemon: env.js writer output, nginx template substitution ($host/$uri preserved), compose YAML, same-origin vs default API_BASE
+- [!] NOTE: a real `docker build`/`up` could not run in this sandbox (no Docker daemon) — build/boot is a manual verification step (commands in RUNNING.md)
 ## Phase 6 — Verification + VERIFICATION_REPORT.md  _(not started)_
 
 ## Docs to also produce (per brief)
