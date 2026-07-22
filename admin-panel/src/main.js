@@ -5,7 +5,10 @@ import { bootstrapSession, isAuthenticated, isAdmin } from './auth/auth.js';
 import { renderLogin } from './views/login.js';
 import { renderDashboard } from './views/dashboard.js';
 import { renderResource } from './views/resource.js';
+import { renderList } from './views/list.js';
+import { renderForm } from './views/form.js';
 import { renderForbidden, renderNotFound } from './views/errors.js';
+import { getResource } from './resources/registry.js';
 
 const appEl = document.getElementById('app');
 const router = new Router();
@@ -32,10 +35,27 @@ router
     setActiveNav('/');
     renderDashboard(out, { router });
   })
+  .add('/r/:resource/new', (ctx) => {
+    const out = ensureShell(appEl, router);
+    setActiveNav('/r/' + ctx.params.resource);
+    const res = getResource(ctx.params.resource);
+    if (res && res.capabilities?.create) renderForm(out, res, { router });
+    else renderResource(out, ctx.params.resource, { router });
+  })
+  .add('/r/:resource/:id', (ctx) => {
+    const out = ensureShell(appEl, router);
+    setActiveNav('/r/' + ctx.params.resource);
+    const res = getResource(ctx.params.resource);
+    if (res && (res.capabilities?.update || res.capabilities?.retrieve)) renderForm(out, res, { router, id: ctx.params.id });
+    else renderResource(out, ctx.params.resource, { router });
+  })
   .add('/r/:resource', (ctx) => {
     const out = ensureShell(appEl, router);
     setActiveNav('/r/' + ctx.params.resource);
-    renderResource(out, ctx.params.resource, { router });
+    const res = getResource(ctx.params.resource);
+    const listable = res && res.capabilities?.list !== false && res.viewStyle !== 'actions' && res.viewStyle !== 'lookup';
+    if (listable) renderList(out, res, { router });
+    else renderResource(out, ctx.params.resource, { router });
   })
   .add('/forbidden', () => {
     const out = ensureShell(appEl, router);

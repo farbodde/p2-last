@@ -847,6 +847,212 @@
   margin-bottom: var(--sp-4);
 }
 
+/* ===== Toolbar (list view) ===== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  flex-wrap: wrap;
+}
+.toolbar__left {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+.toolbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.toolbar__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.toolbar__search .input {
+  min-width: 240px;
+  padding-inline-start: 34px;
+}
+.toolbar__searchicon {
+  position: absolute;
+  inset-inline-start: 10px;
+  color: var(--text-muted);
+  pointer-events: none;
+  display: inline-flex;
+}
+
+/* ===== Row actions ===== */
+.rowactions {
+  display: flex;
+  gap: var(--sp-1);
+  justify-content: flex-end;
+}
+.rowactions .btn {
+  padding: 4px 10px;
+}
+
+/* ===== Thumbnails ===== */
+.thumb {
+  height: 34px;
+  width: 34px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-subtle);
+  vertical-align: middle;
+}
+.thumb--lg {
+  height: 88px;
+  width: 88px;
+}
+
+/* ===== Forms ===== */
+.card--form {
+  max-width: 720px;
+}
+.form-loading {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  color: var(--text-secondary);
+}
+.rform__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-2);
+  margin-top: var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--border);
+}
+.file-field {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+.file {
+  padding: 7px 10px;
+  cursor: pointer;
+}
+.file__preview img {
+  display: block;
+}
+
+/* ===== Multi-select ===== */
+.ms {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  padding: var(--sp-2);
+}
+.ms__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-2);
+  min-height: 22px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px 2px 10px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-radius: var(--radius-full);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+.chip__x {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 50%;
+}
+.chip__x:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+.ms__search {
+  margin-bottom: var(--sp-2);
+}
+.ms__list {
+  max-height: 200px;
+  overflow-y: auto;
+  border-top: 1px solid var(--border);
+  padding-top: var(--sp-1);
+}
+.ms__opt {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.ms__opt:hover {
+  background: var(--bg-hover);
+}
+.ms__opt.is-sel {
+  color: var(--primary);
+  font-weight: 550;
+}
+.ms__check {
+  width: 16px;
+  display: inline-flex;
+  color: var(--primary);
+}
+.ms__empty {
+  padding: var(--sp-3);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  text-align: center;
+}
+
+/* ===== Game category rows ===== */
+.gc-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+.gc-row {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-3);
+  background: var(--bg-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.gc-row__main {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: flex-end;
+}
+.gc-row__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.gc-row__label {
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+  font-weight: 550;
+}
+.gc-row__remove {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  color: var(--danger);
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
   .shell {

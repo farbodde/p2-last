@@ -6,10 +6,13 @@
   <meta name="color-scheme" content="light dark" />
   <title>Player2 Admin</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>" />
+  <!-- Root-relative paths so assets resolve on nested SPA routes (e.g. /r/users)
+       and after a hard refresh, not just at "/". -->
+  <base href="/" />
   <!-- Runtime env (overridable by Docker/nginx at deploy time). Must load before the app. -->
-  <script src="./env.js"></script>
-  <link rel="stylesheet" href="./src/styles/theme.css" />
-  <link rel="stylesheet" href="./src/styles/app.css" />
+  <script src="/env.js"></script>
+  <link rel="stylesheet" href="/src/styles/theme.css" />
+  <link rel="stylesheet" href="/src/styles/app.css" />
   <!-- Set theme ASAP to avoid flash of wrong theme -->
   <script>
     (function () {
@@ -28,6 +31,6 @@
   </div>
   <div id="toast-root" class="toast-root" aria-live="polite" aria-atomic="true"></div>
   <div id="dialog-root"></div>
-  <script type="module" src="./src/main.js"></script>
+  <script type="module" src="/src/main.js"></script>
 </body>
 </html>

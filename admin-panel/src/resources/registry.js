@@ -36,6 +36,7 @@ export const RESOURCES = [
     gate: GATE.ADMIN_GROUP,
     lookup: 'username', // string lookup, NOT pk
     idField: 'id',
+    updateMethod: 'PUT', // UserUpdateView only implements PUT
     envelope: ENVELOPE.USER,
     capabilities: { list: true, create: true, retrieve: true, update: true, delete: true },
     endpoints: {

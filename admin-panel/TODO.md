@@ -31,11 +31,23 @@ _Updated every phase. `[x]` done · `[~]` in progress · `[ ]` todo · `[!]` blo
 
 Decisions applied (changeable): schema=Hybrid (no backend change) · scope=existing endpoints · lang=LTR-English (RTL-ready via logical CSS) · panel handles is_staff 403 gracefully.
 
-## Phase 2 — Pilot resources  _(not started)_
-- [ ] Platforms (simple, image, style-G)
-- [ ] Users (APIView, username lookup, envelope B, role action)
-- [ ] Games (M2M + nested categories/items, cover upload)
-- [ ] STOP — review
+## Phase 2 — Pilot resources  ✅ (STOP for review)
+- [x] Generic engine: data layer (api.js), OPTIONS metadata resolver (metadata.js), relation loader (relations.js)
+- [x] Generic LIST view: table, search (where backend supports), filters, client-side sort, server pagination, row select + bulk delete, New button, row Edit/Delete
+- [x] Generic FORM view: fields from metadata; string/email/text/choice/boolean/date/integer/list/json/image/pk-relation/m2m controls; validation-error mapping; multipart on file fields
+- [x] Platforms (simple, image upload, style-G) — **OPTIONS enrichment verified** (form built ["Title *","Logo"] from live OPTIONS)
+- [x] Users (APIView, username lookup, envelope B, PUT update, role + choices, image fields, search + role filter)
+- [x] Games (M2M platforms + nested categories/items repeater + cover upload) — composite form verified end-to-end
+- [x] Routes wired: /r/:resource (list), /r/:resource/new, /r/:resource/:id (edit)
+- [x] Fixed real bug: index.html used relative asset paths → 404 on nested-route refresh/prod; added `<base href="/">` + root-relative paths
+- [x] Verified headless (mocked API): users list/form, platforms list/form, game composite form — **zero console/page errors**
+- [!] **STOP — awaiting review of the 3 pilots before generalising in Phase 3**
+
+Phase 2 caveat to validate live: the Games write endpoint mixes an ImageField
+(cover, multipart) with a nested `categories` list (natural as JSON). The panel
+sends JSON when no new cover is chosen, and DRF bracket-notation multipart when a
+cover file is attached. The multipart+nested path is UNVERIFIED against a live
+backend (documented in views/game-form.js) — confirm during Phase 6.
 
 ## Phase 3 — Generalise  _(not started)_
 - [ ] Categories, Items
