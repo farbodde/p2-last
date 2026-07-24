@@ -11,6 +11,11 @@ COPY index.html /usr/share/nginx/html/index.html
 COPY env.js     /usr/share/nginx/html/env.js
 COPY src        /usr/share/nginx/html/src
 
+# nginx workers run as the unprivileged `nginx` user; make sure every file is
+# world-readable and every directory is world-traversable, otherwise requests
+# under /src/** fail with "stat() ... (13: Permission denied)".
+RUN chmod -R a+rX /usr/share/nginx/html
+
 # nginx site config as a template (the base image runs envsubst on
 # /etc/nginx/templates/*.template at startup, substituting ${BACKEND_HOST}/${BACKEND_PORT}).
 COPY docker/default.conf.template /etc/nginx/templates/default.conf.template
